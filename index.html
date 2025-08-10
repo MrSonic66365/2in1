@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JSFiddle c6pnk89x</title>
+
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(180deg, #000000, #1a1a1a);
+  color: #fff;
+}
+
+h2 {
+  color: #d4af37;
+  margin-top: 10px;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  text-align: left;
+  color: #fff;
+}
+
+input {
+  padding: 5px;
+  font-size: 16px;
+  width: 200px;
+  border-radius: 5px;
+  border: 1px solid #d4af37;
+  background: #111;
+  color: #fff;
+}
+
+.highlight-label {
+  color: #ffcc33;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.highlight-input {
+  border: 2px solid #ffcc33;
+  background: #000;
+  color: #ffcc33;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 2px;
+}
+.highlight-input::placeholder {
+  color: #ffcc33;
+  opacity: 0.6;
+}
+
+button {
+  margin-top: 10px;
+  padding: 8px 20px;
+  background: linear-gradient(90deg, #d4af37, #b8860b);
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+button:hover {
+  background: linear-gradient(90deg, #ffcc33, #d4af37);
+}
+
+th {
+  background: #d4af37;
+  color: #000;
+}
+
+td {
+  background: #222;
+  color: #fff;
+  text-align: center;
+}
+
+.header-img {
+  max-width: 200px;
+  margin-top: 20px;
+}
+
+table {
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table, th, td {
+  border: 1px solid #d4af37;
+}
+
+#orderPopup input,
+#clearBillsPopup input {
+  background: #111;
+  border: 1px solid #d4af37;
+  color: #ffcc33;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+#orderPopup button {
+  background: linear-gradient(90deg, #d4af37, #b8860b);
+  color: #000;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#orderPopup button:hover {
+  background: linear-gradient(90deg, #ffcc33, #d4af37);
+}
+
+#clearBillsPopup button {
+  background: #b22222;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#clearBillsPopup button:hover {
+  background: #ff4c4c;
+}
+
+  </style>
+
+  
+</head>
+<body>
+  <img src="https://i.postimg.cc/sfm5pxG5/2-in-1.png" alt="2in1" class="header-img">
+
+<h2>ลุ้นโชค 2 ตัวทั้งบนและล่าง อ้างอิง หวยรัฐบาล</h2>
+
+<div class="lotto-box" style="display: flex; align-items: center; gap:10px; justify-content: center;">
+  <div style="text-align:left;">
+    <label class="highlight-label">เลข 2 ตัว:</label>
+    <input type="text" id="lottoNumber" maxlength="2" placeholder="00-99" class="highlight-input" style="width:100px;">
+  </div>
+
+  <div style="text-align:left;">
+    <label class="highlight-label">จำนวนเงิน:</label>
+    <input type="number" id="lottoAmount" min="1" placeholder="บาท" style="width:120px;">
+  </div>
+
+  <button onclick="addLotto()" style="height: 40px; margin-top: 22px;">บันทึก</button>
+</div>
+
+<h3>รายการที่เลือก</h3>
+<table style="margin:auto; width:80%;">
+  <thead>
+    <tr>
+      <th>เลข</th>
+      <th>จำนวนเงิน</th>
+      <th>อัตราจ่าย</th>
+      <th>ลบ</th>
+    </tr>
+  </thead>
+  <tbody id="lottoList"></tbody>
+</table>
+
+<h3>ยอดรวม: <span id="totalAmount">0</span> บาท</h3>
+
+<button id="orderBtn" style="display:none; margin-top: 20px; padding: 10px 20px; font-weight:bold; font-size:16px; background: linear-gradient(90deg, #d4af37, #b8860b); color:#000; border:none; border-radius:5px; cursor:pointer;" onclick="openOrderPopup()">สั่งซื้อรายการทั้งหมด</button>
+
+<!-- popup ใส่ชื่อ-เบอร์ -->
+<div id="orderPopup" style="display:none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7);">
+  <div style="background:#222; padding:20px; max-width:320px; margin: 10% auto; border-radius:10px; color:#fff;">
+    <h3>กรุณากรอกข้อมูลลูกค้าเพื่อสั่งซื้อ</h3>
+    <label>ชื่อลูกค้า:</label>
+    <input type="text" id="custName" placeholder="กรอกชื่อ" style="width:100%; padding:5px; margin-bottom:10px;">
+
+    <label>เบอร์โทร:</label>
+    <input type="text" id="custPhone" placeholder="กรอกเบอร์" style="width:100%; padding:5px; margin-bottom:10px;">
+
+    <button onclick="confirmOrder()" style="margin-right:10px;">ยืนยันสั่งซื้อ</button>
+    <button onclick="closeOrderPopup()">ยกเลิก</button>
+  </div>
+</div>
+
+<hr style="margin: 40px 0; border: 1px solid #d4af37; width: 80%;">
+
+<h3>บิลที่สั่งซื้อแล้ว</h3>
+<table style="margin:auto; width:90%;">
+  <thead>
+    <tr>
+      <th>ลำดับบิล</th>
+      <th>ชื่อ</th>
+      <th>เบอร์โทร</th>
+      <th>เลขที่สั่ง</th>
+      <th>จำนวนเงินรวม</th>
+      <th>อัตราจ่าย</th>
+      <th>วันที่</th>
+    </tr>
+  </thead>
+  <tbody id="billsList"></tbody>
+</table>
+
+<button id="clearBillsBtn" style="margin-top: 20px; padding: 10px 20px; font-weight:bold; font-size:16px; background:#b22222; color:#fff; border:none; border-radius:5px; cursor:pointer;" onclick="openClearBillsPopup()">
+  ลบบิลที่บันทึกทั้งหมด
+</button>
+
+<!-- popup ใส่รหัสผ่าน -->
+<div id="clearBillsPopup" style="display:none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7);">
+  <div style="background:#222; padding:20px; max-width:320px; margin: 10% auto; border-radius:10px; color:#fff; text-align:center;">
+    <h3>กรุณาใส่รหัสผ่านเพื่อลบบิลทั้งหมด</h3>
+    <input type="password" id="clearBillsPassword" placeholder="รหัสผ่าน" style="width:100%; padding:5px; margin-bottom:10px;">
+
+    <button onclick="confirmClearBills()" style="margin-right:10px; background:#b22222; color:#fff;">ยืนยันลบ</button>
+    <button onclick="closeClearBillsPopup()">ยกเลิก</button>
+  </div>
+</div>
+
+
+  <script>
+    let lottoData = JSON.parse(localStorage.getItem("lottoData")) || [];
+
+function renderLotto() {
+  const list = document.getElementById("lottoList");
+  list.innerHTML = "";
+  let totalAmount = 0;
+
+  lottoData.forEach((item, index) => {
+    const amount = Number(item.amount);
+    const pay = amount * 50;
+    totalAmount += amount;
+
+    let row = `<tr>
+        <td>${item.number}</td>
+        <td>${amount} บาท</td>
+        <td>${pay} บาท</td>
+        <td><button onclick="deleteLotto(${index})">ลบ</button></td>
+    </tr>`;
+    list.innerHTML += row;
+  });
+
+  document.getElementById("totalAmount").textContent = totalAmount + " บาท";
+
+  document.getElementById("orderBtn").style.display = lottoData.length > 0 ? "inline-block" : "none";
+}
+
+function addLotto() {
+  const number = document.getElementById("lottoNumber").value.trim();
+  const amount = document.getElementById("lottoAmount").value.trim();
+
+  if (number === "" || amount === "" || isNaN(amount)) {
+    alert("กรุณากรอกเลขและจำนวนเงินให้ถูกต้อง");
+    return;
+  }
+
+  lottoData.push({ number, amount });
+  localStorage.setItem("lottoData", JSON.stringify(lottoData));
+  renderLotto();
+
+  document.getElementById("lottoNumber").value = "";
+  document.getElementById("lottoAmount").value = "";
+}
+
+function deleteLotto(index) {
+  lottoData.splice(index, 1);
+  localStorage.setItem("lottoData", JSON.stringify(lottoData));
+  renderLotto();
+}
+
+function openOrderPopup() {
+  document.getElementById("custName").value = "";
+  document.getElementById("custPhone").value = "";
+  document.getElementById("orderPopup").style.display = "block";
+}
+
+function closeOrderPopup() {
+  document.getElementById("orderPopup").style.display = "none";
+}
+
+function confirmOrder() {
+  const name = document.getElementById("custName").value.trim();
+  const phone = document.getElementById("custPhone").value.trim();
+
+  if (name === "" || phone === "") {
+    alert("กรุณากรอกชื่อและเบอร์โทร");
+    return;
+  }
+
+  let bills = JSON.parse(localStorage.getItem("bills")) || [];
+
+  lottoData.forEach(item => {
+    const newBill = {
+      customerName: name,
+      customerPhone: phone,
+      order: item,
+      timestamp: new Date().toISOString()
+    };
+    bills.push(newBill);
+  });
+
+  localStorage.setItem("bills", JSON.stringify(bills));
+
+  const orderDetails = lottoData.map(i => {
+    const amount = Number(i.amount);
+    const pay = amount * 50;
+    return `${i.number} - จำนวนเงิน ${amount} บาท - อัตราจ่าย ${pay} บาท`;
+  }).join("\n");
+
+  alert(`สั่งซื้อสำเร็จ!\nชื่อ: ${name}\nเบอร์โทร: ${phone}\nรายการ:\n${orderDetails}`);
+
+  lottoData = [];
+  localStorage.removeItem("lottoData");
+  renderLotto();
+  closeOrderPopup();
+  renderBills();
+}
+
+function renderBills() {
+  const bills = JSON.parse(localStorage.getItem("bills")) || [];
+  const list = document.getElementById("billsList");
+  list.innerHTML = "";
+
+  let billIndex = 1;
+  let totalAmountSum = 0;
+
+  bills.forEach((bill) => {
+    if (!bill.order || !bill.order.amount) {
+      return;
+    }
+
+    const amount = Number(bill.order.amount);
+    const date = new Date(bill.timestamp).toLocaleString();
+
+    totalAmountSum += amount;
+
+    const billNumber = String(billIndex).padStart(3, '0');
+    billIndex++;
+
+    let row = `<tr>
+      <td>${billNumber}</td>
+      <td>${bill.customerName}</td>
+      <td>${bill.customerPhone}</td>
+      <td style="text-align:center;">${bill.order.number}</td>
+      <td>${amount} บาท</td>
+      <td>${amount * 50} บาท</td>
+      <td>${date}</td>
+    </tr>`;
+    list.innerHTML += row;
+  });
+
+  if (billIndex > 1) {
+    list.innerHTML += `<tr style="font-weight:bold; background:#444;">
+      <td colspan="4" style="text-align:right;">รวมจำนวนเงินทั้งหมด</td>
+      <td>${totalAmountSum} บาท</td>
+      <td></td>
+      <td></td>
+    </tr>`;
+  }
+}
+
+function openClearBillsPopup() {
+  document.getElementById("clearBillsPassword").value = "";
+  document.getElementById("clearBillsPopup").style.display = "block";
+}
+
+function closeClearBillsPopup() {
+  document.getElementById("clearBillsPopup").style.display = "none";
+}
+
+function confirmClearBills() {
+  const password = document.getElementById("clearBillsPassword").value.trim();
+  const correctPassword = "admin123";  // เปลี่ยนรหัสผ่านตามต้องการ
+
+  if (password === "") {
+    alert("กรุณาใส่รหัสผ่าน");
+    return;
+  }
+
+  if (password === correctPassword) {
+    localStorage.removeItem("bills");
+    alert("ลบบิลทั้งหมดเรียบร้อยแล้ว");
+    closeClearBillsPopup();
+    renderBills();
+  } else {
+    alert("รหัสผ่านไม่ถูกต้อง");
+  }
+}
+
+renderLotto();
+renderBills();
+
+  </script>
+</body>
+</html>
